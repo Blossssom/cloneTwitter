@@ -36,6 +36,7 @@ const Auth = () => {
         }
     };
 
+    // login, create 버튼 토글 함수
     const toggleAccount = () => {
          setNewAccount(prev => {
             return !prev;
