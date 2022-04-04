@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import AppRouter from "./Router";
 import {authService} from "myBase";
-import { onAuthStateChanged } from "firebase/auth";
+
 
 function App() {
   // firebase에 비해 렌더링 속도가 빨라 로그인을 하더라도 ui상에서 로그인 창이 다시 나오는 것을 볼 수 있다.
   // 이문제를 해결하자
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userObj, setUserObj] = useState(null);
   
   useEffect(() => {
     // 로그인 상태에 대해 감지하는 sdk이다.
@@ -15,6 +16,7 @@ function App() {
     authService.onAuthStateChanged((user) => {
       if(user) {
         setIsLoggedIn(true);
+        setUserObj(user);
       }else {
         setIsLoggedIn(false);
       }
@@ -24,7 +26,7 @@ function App() {
 
   return (
     <>
-      {init ? <AppRouter isLoggedIn={isLoggedIn} /> : "Initializing..."}
+      {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj } /> : "Initializing..."}
     </>
   );
 }

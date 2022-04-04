@@ -2,7 +2,7 @@ import { addDoc, collection, doc, getDocs, query } from "firebase/firestore";
 import { dbService } from "myBase";
 import React, { useEffect, useState } from "react"
 
-const Home = () => {
+const Home = ({userObj}) => {
     const [twitC, setTwitC] = useState('');
     const [twits, setTwits] = useState([]);
     
@@ -14,7 +14,7 @@ const Home = () => {
         querySnapshot.forEach((tData) => {
             const twitsObj = {
                 ...tData.data(),
-                id: tData.id
+                id: tData.id,
             }
             setTwits((prev) => [twitsObj, ...prev]);
         })
@@ -28,7 +28,7 @@ const Home = () => {
         e.preventDefault();
         // firebase db에 doc 생성
         await addDoc(collection(dbService, "twitClone") , {
-            twitC,
+            text: twitC,
             createdAt: Date.now()
         });
         setTwitC('');
