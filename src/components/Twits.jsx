@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { dbService } from "myBase";
 import React, { useState } from "react";
@@ -45,6 +44,7 @@ const Twits = ({twitsObj, isOwner}) => {
                 <button onClick={toggleEditing}>Cancel</button>
             </>) : 
             (<> 
+            {twitsObj.attachmentUrl && (<img src={twitsObj.attachmentUrl} width="50px" height="50px" alt="pic"></img>)}
                 {
                     // props로 받아온 isOwner가 true일 경우에만 버튼 활성화
                     isOwner && (
