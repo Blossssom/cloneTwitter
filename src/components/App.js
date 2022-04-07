@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AppRouter from "./Router";
 import {authService} from "myBase";
+import { updateProfile } from "firebase/auth";
 
 
 function App() {
@@ -16,7 +17,12 @@ function App() {
     authService.onAuthStateChanged((user) => {
       if(user) {
         setIsLoggedIn(true);
-        setUserObj(user);
+        // return된 user을 최대한 풀어 실시간으로 변경을 감지하게 했다. 천천히 살펴볼 필요가 있음
+        setUserObj({
+          displayName: user.displayName,
+          uid: user.uid,
+          updateProfile: (args) => updateProfile(user, {displayName: user.displayName}),
+        });
       }else {
         setIsLoggedIn(false);
       }
@@ -24,9 +30,18 @@ function App() {
     });
   }, []);
 
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.uid,
+      updateProfile: () => updateProfile(user, {displayName: user.displayName}),
+    });
+  };
+
   return (
     <>
-      {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj } /> : "Initializing..."}
+      {init ? <AppRouter refreshUser={refreshUser} isLoggedIn={isLoggedIn} userObj={userObj } /> : "Initializing..."}
     </>
   );
 }

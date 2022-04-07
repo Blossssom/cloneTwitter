@@ -1,5 +1,6 @@
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { dbService } from "myBase";
+import { deleteObject, ref } from "firebase/storage";
+import { dbService, storageService } from "myBase";
 import React, { useState } from "react";
 
 const Twits = ({twitsObj, isOwner}) => {
@@ -8,12 +9,14 @@ const Twits = ({twitsObj, isOwner}) => {
     // edit을 위한 내용 state
     const [newTwit, setNewTwit] = useState(twitsObj.text);
     const twitRef = doc(dbService, 'twitClone', `${twitsObj.id}`);
+    const imageUrl = ref(storageService, twitsObj.attachmentUrl);
 
     const onDeleteClick = async () => {
         const deleteCheck = window.confirm('Are you sure want to delete?');
-        
+
         if(deleteCheck) {
             await deleteDoc(twitRef);
+            await deleteObject(imageUrl);
         }
     };
 

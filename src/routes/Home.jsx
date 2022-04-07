@@ -29,12 +29,12 @@ const Home = ({userObj}) => {
         e.preventDefault();
         let attachmentUrl = '';
 
-        if(attachment !== "") {
+        if(attachment !== "" && twitC.length > 0) {
             const attachmentRef = ref(storageService, `${userObj.uid}/${v4()}`);
             const response = await uploadString(attachmentRef, attachment, 'data_url');
             attachmentUrl = await getDownloadURL(response. ref);
         }
-        
+
         const twitForm = {
             text: twitC,
             createdAt: Date.now(),
